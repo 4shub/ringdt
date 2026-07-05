@@ -1,2 +1,5 @@
-# RingDT
-Webring for people who know what DT means lmao
+# ShubRings
+A few webrings managed by shub
+
+* RingDT
+* LettaMates

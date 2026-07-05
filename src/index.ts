@@ -1,6 +1,6 @@
-import ring from './ring.json';
+import ringDT from './ringdt/ring.json';
+import lettamates from './lettamates/ring.json';
 
-const {members} = ring;
 
 export default {
   /**
@@ -16,30 +16,88 @@ export default {
     // get referrer
 
     const referrer = new URL(request.url).searchParams.get('from') || request.headers.get('referer') || request.headers.get('referrer') || '';
-    const currentMember = members.find(member => member.url === referrer);
-
-    if (!currentMember) {
-      return new Response('Member not found', {status: 404});
-    }
 
     switch (pathname) {
       case '/':
         return new Response('Zadu');
-      case '/next':
+      case '/next': {
+        const {members} = ringDT;
+
+        const currentMember = members.find(member => member.url === referrer);
+
+        if (!currentMember) {
+          return new Response('Member not found', {status: 404});
+        }
+
         const nextMember = members[(members.indexOf(currentMember) + 1) % members.length];
 
         // redirect to the next member's URL
         return Response.redirect(nextMember.url, 302);
-      case '/prev':
+      }
+      case '/prev': {
+        const {members} = ringDT;
+
+        const currentMember = members.find(member => member.url === referrer);
+
+        if (!currentMember) {
+          return new Response('Member not found', {status: 404});
+        }
         const prevMember = members[(members.indexOf(currentMember) - 1 + members.length) % members.length];
 
         // redirect to the previous member's URL
         return Response.redirect(prevMember.url, 302);
-      case '/random':
+      }
+
+      case '/random': {
+        const {members} = ringDT;
+
+        const currentMember = members.find(member => member.url === referrer);
+
         const randomMember = members[Math.floor(Math.random() * members.length)];
 
         // redirect to a random member's URL
         return Response.redirect(randomMember.url, 302);
+      }
+
+      case '/lettamates/next': {
+        const {members} = lettamates;
+
+        const currentMember = members.find(member => member.url === referrer);
+
+        if (!currentMember) {
+          return new Response('Member not found', {status: 404});
+        }
+
+        const nextMember = members[(members.indexOf(currentMember) + 1) % members.length];
+
+        // redirect to the next member's URL
+        return Response.redirect(nextMember.url, 302);
+
+      }
+      case '/lettamates/prev': {
+        const {members} = lettamates;
+        const currentMember = members.find(member => member.url === referrer);
+
+        if (!currentMember) {
+          return new Response('Member not found', {status: 404});
+        }
+        const prevMember = members[(members.indexOf(currentMember) - 1 + members.length) % members.length];
+
+        // redirect to the previous member's URL
+        return Response.redirect(prevMember.url, 302);
+      }
+      case '/lettamates/random': {
+        const {members} = lettamates;
+        const currentMember = members.find(member => member.url === referrer);
+
+        if (!currentMember) {
+          return new Response('Member not found', {status: 404});
+        }
+        const randomMember = members[Math.floor(Math.random() * members.length)];
+
+        // redirect to a random member's URL
+        return Response.redirect(randomMember.url, 302);
+      }
       default:
         // If the pathname does not match any known routes, return a 404 response
         return new Response('Not Found', {status: 404});
